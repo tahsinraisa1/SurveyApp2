@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -24,21 +27,22 @@ public class MCQFragment extends AppCompatActivity {
     String[] Optionss;
 
     Button next;
-    RadioAdapter radioAdapter;
-    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m_c_q_fragment);
 
-        dd = findViewById(R.id.textView7);
-        qno = findViewById(R.id.textView8);
-        next = findViewById(R.id.button2);
 
-        radioAdapter = new RadioAdapter(this, R.layout.radio_list);
-        listView = findViewById(R.id.listv1);
-        listView.setAdapter(radioAdapter);
+        LinearLayout linearLayout = findViewById(R.id.lay_options);
+        RadioGroup radioGroup = new RadioGroup(this);
+        radioGroup.setOrientation(RadioGroup.VERTICAL);
+        RadioGroup.LayoutParams radioButton1;
+
+        dd = findViewById(R.id.mctext);
+        qno = findViewById(R.id.mcno);
+        next = findViewById(R.id.mcbutton);
+
 
         final Intent intent = getIntent();
         dat = intent.getStringExtra("data");
@@ -57,9 +61,12 @@ public class MCQFragment extends AppCompatActivity {
             dd.setText(Question);
             for(int i=0;i<Optionss.length;i++)
             {
-                String input = Optionss[i];
-                radioAdapter.add(input);
+                RadioButton radioButton = new RadioButton(this);
+                radioButton.setText(Optionss[i]);
+                radioButton1 = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.MATCH_PARENT);
+                radioGroup.addView(radioButton, radioButton1);
             }
+            linearLayout.addView(radioGroup);
 
 
 

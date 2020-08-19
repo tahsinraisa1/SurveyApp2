@@ -27,9 +27,9 @@ public class NumberFragment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_number_fragment);
 
-        dd = findViewById(R.id.textView7);
-        qno = findViewById(R.id.textView8);
-        next = findViewById(R.id.button2);
+        dd = findViewById(R.id.numtext);
+        qno = findViewById(R.id.numno);
+        next = findViewById(R.id.numbutton);
 
         final Intent intent = getIntent();
         dat = intent.getStringExtra("data");

@@ -49,8 +49,8 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="50dp"
             android:ems="10"
-            android:inputType="phone"
-            android:text="Enter with country code" />
+            android:hint="Enter with country code"
+            android:inputType="phone" />
     </LinearLayout>
 
     <Button
