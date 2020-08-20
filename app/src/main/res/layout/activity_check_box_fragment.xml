@@ -8,12 +8,6 @@
     android:backgroundTint="#3F51B5"
     tools:context=".CheckBoxFragment">
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
-
     <TextView
         android:id="@+id/cbtext"
         android:layout_width="358dp"

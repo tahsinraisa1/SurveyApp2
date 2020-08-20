@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,13 +19,16 @@ import java.text.BreakIterator;
 
 public class TextFragment extends AppCompatActivity {
 
-    public static TextView dd, qno;
+    TextView dd, qno;
+    EditText txt;
     String dat="";
     int index;
     String Question="";
     String Type = "";
     String Required="";
     String[] Optionss;
+    JSONArray jsonArray;
+    DatabaseHelper myDB;
 
     Button next;
     @Override
@@ -30,9 +36,13 @@ public class TextFragment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_fragment);
 
+        LinearLayout linearLayout = findViewById(R.id.lay_optionstf);
+        myDB = new DatabaseHelper(TextFragment.this);
+
         dd = findViewById(R.id.textView7);
         qno = findViewById(R.id.textView8);
         next = findViewById(R.id.button2);
+        txt = findViewById(R.id.textans1);
 
         final Intent intent = getIntent();
         dat = intent.getStringExtra("data");
@@ -42,7 +52,7 @@ public class TextFragment extends AppCompatActivity {
 
 
         try {
-            JSONArray jsonArray = new JSONArray(dat);
+            jsonArray = new JSONArray(dat);
             JSONObject jsonObject = (JSONObject) jsonArray.get(index);
             Question = Question+jsonObject.get("question");
             Type = Type+jsonObject.get("type");
@@ -58,40 +68,62 @@ public class TextFragment extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Type.equals("text"))
+                if((Required.equals("true") && !txt.getText().toString().isEmpty()) || Required.equals("false"))
                 {
-                    Intent intent1 = new Intent(TextFragment.this, TextFragment.class);
-                    intent1.putExtra("data",dat);
-                    intent1.putExtra("index",index+1);
-                    startActivity(intent1);
+                    try {
+                        JSONObject jsonObject1 = (JSONObject) jsonArray.get(index+1);
+                        Type = (String) jsonObject1.get("type");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    myDB.insertSData(Integer.valueOf(MainActivity.keyid), index+1, Question, txt.getText().toString());
+                    if(index<jsonArray.length()-1)
+                    {
+
+                        if(Type.equals("text"))
+                        {
+                            Intent intent1 = new Intent(TextFragment.this, TextFragment.class);
+                            intent1.putExtra("data",dat);
+                            intent1.putExtra("index",index+1);
+                            startActivity(intent1);
+                        }
+                        else if(Type.equals("Checkbox"))
+                        {
+                            Intent intent1 = new Intent(TextFragment.this, CheckBoxFragment.class);
+                            intent1.putExtra("data",dat);
+                            intent1.putExtra("index",index+1);
+                            startActivity(intent1);
+                        }
+                        else if(Type.equals("multiple choice"))
+                        {
+                            Intent intent1 = new Intent(TextFragment.this, MCQFragment.class);
+                            intent1.putExtra("data",dat);
+                            intent1.putExtra("index",index+1);
+                            startActivity(intent1);
+                        }
+                        else if(Type.equals("number"))
+                        {
+                            Intent intent1 = new Intent(TextFragment.this, NumberFragment.class);
+                            intent1.putExtra("data",dat);
+                            intent1.putExtra("index",index+1);
+                            startActivity(intent1);
+                        }
+                        else if(Type.equals("dropdown"))
+                        {
+                            Intent intent1 = new Intent(TextFragment.this,DropdownFragment.class);
+                            intent1.putExtra("data",dat);
+                            intent1.putExtra("index",index+1);
+                            startActivity(intent1);
+                        }
+                    }
+                    else {
+                        Toast.makeText(TextFragment.this, "Your response has been saved!", Toast.LENGTH_LONG).show();
+                        Intent intent1 = new Intent(TextFragment.this, MainActivity.class);
+                        startActivity(intent1);
+                    }
                 }
-                else if(Type.equals("Checkbox"))
-                {
-                    Intent intent1 = new Intent(TextFragment.this, CheckBoxFragment.class);
-                    intent1.putExtra("data",dat);
-                    intent1.putExtra("index",index+1);
-                    startActivity(intent1);
-                }
-                else if(Type.equals("multiple choice"))
-                {
-                    Intent intent1 = new Intent(TextFragment.this, MCQFragment.class);
-                    intent1.putExtra("data",dat);
-                    intent1.putExtra("index",index+1);
-                    startActivity(intent1);
-                }
-                else if(Type.equals("number"))
-                {
-                    Intent intent1 = new Intent(TextFragment.this, NumberFragment.class);
-                    intent1.putExtra("data",dat);
-                    intent1.putExtra("index",index+1);
-                    startActivity(intent1);
-                }
-                else if(Type.equals("dropdown"))
-                {
-                    Intent intent1 = new Intent(TextFragment.this,DropdownFragment.class);
-                    intent1.putExtra("data",dat);
-                    intent1.putExtra("index",index+1);
-                    startActivity(intent1);
+                else {
+                    Toast.makeText(TextFragment.this, "This field is required!", Toast.LENGTH_LONG).show();
                 }
             }
         });

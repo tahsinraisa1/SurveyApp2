@@ -22,6 +22,7 @@ import java.net.URL;
 
 public class FetchQuestion extends AsyncTask<Void, Void, Void> {
 
+
     String data="";
     static int i=0;
     String Type="";
@@ -32,9 +33,6 @@ public class FetchQuestion extends AsyncTask<Void, Void, Void> {
         this.context = context;
     }
 
-    public FetchQuestion() {
-
-    }
 
     @Override
     protected Void doInBackground(Void... voids) {
@@ -49,6 +47,9 @@ public class FetchQuestion extends AsyncTask<Void, Void, Void> {
                 line = bufferedReader.readLine();
                 data = data+line;
             }
+            bufferedReader.close();
+            inputStream.close();
+            httpURLConnection.disconnect();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

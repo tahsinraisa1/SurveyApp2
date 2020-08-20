@@ -1,6 +1,7 @@
 package com.example.mysurveyapp2;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,23 +15,61 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String keyid;
     Button start;
+    TextView dash;
+    DatabaseHelper myDB;
+    Cursor c;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        myDB = new DatabaseHelper(MainActivity.this);
+        Date date = new Date();
+        final Timestamp ts=new Timestamp(date.getTime());
+
+        dash = findViewById(R.id.dashlink);
 
         start = findViewById(R.id.button);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FetchQuestion fq = new FetchQuestion(MainActivity.this);
-                fq.execute();
+                boolean isInsertedT = myDB.insertTData(ts);
+                if(isInsertedT==true)
+                {
+                    c = myDB.getTrack();
+                    while (c.moveToNext())
+                    {
+                        keyid = c.getString(0);
+                    }
+                    //Toast toast = Toast.makeText(MainActivity.this, "Successfully trackID inserted", Toast.LENGTH_LONG);
+                    //toast.show();
+                    FetchQuestion fq = new FetchQuestion(MainActivity.this);
+                    fq.execute();
+                }
+                else
+                {
+                    Toast toast = Toast.makeText(MainActivity.this, "Not inserted trackID", Toast.LENGTH_LONG);
+                    toast.show();
+                }
 
+
+            }
+        });
+
+        dash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Dashboard.class);
+                startActivity(intent);
             }
         });
 

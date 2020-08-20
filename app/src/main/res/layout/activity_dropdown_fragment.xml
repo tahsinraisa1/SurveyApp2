@@ -8,12 +8,6 @@
     android:backgroundTint="#3F51B5"
     tools:context=".DropdownFragment">
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
-
     <TextView
         android:id="@+id/ddtext"
         android:layout_width="358dp"
@@ -34,11 +28,11 @@
         android:textSize="20sp" />
 
     <LinearLayout
-        android:id="@+id/lay_options"
+        android:id="@+id/lay_optionsdd"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="196dp"
         android:layout_below="@+id/ddtext"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="51dp"
         android:orientation="vertical">
 
         <Spinner
@@ -54,10 +48,11 @@
         android:id="@+id/ddbutton"
         android:layout_width="219dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lay_options"
+        android:layout_below="@+id/lay_optionsdd"
         android:layout_marginEnd="100dp"
         android:layout_marginStart="100dp"
 
+        android:layout_marginTop="47dp"
         android:backgroundTint="#868FC1"
         android:text="Next" />
 
